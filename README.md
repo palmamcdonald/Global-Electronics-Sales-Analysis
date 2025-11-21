@@ -1,10 +1,9 @@
 # Global-Electronics-Sales-Analysis
 An end-to-end data analysis project using Excel, Power Query, and Pivot Tables.
 
-# Global Electronics Sales Analysis
-
 ## Project Overview
 This project analyzes global sales data to understand customer purchasing behavior and product performance.
+
 **Goal:** To transform raw CSV data into an interactive dashboard that tracks revenue, regional trends, and product popularity.
 
 ![Dashboard View](dashboard-view.jpg)
