@@ -1,0 +1,51 @@
+Customers Table:
+
+let
+    Source = Csv.Document(File.Contents("C:\Users\Win10\Downloads\Project Portfolio\Sample Data\Global Electronics Retailer\Customers.csv"),[Delimiter=",", Columns=10, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"CustomerKey", Int64.Type}, {"Gender", type text}, {"Name", type text}, {"City", type text}, {"State Code", type text}, {"State", type text}, {"Zip Code", Int64.Type}, {"Country", type text}, {"Continent", type text}, {"Birthday", type text}}),
+    #"Trimmed Text" = Table.TransformColumns(Table.TransformColumnTypes(#"Changed Type", {{"CustomerKey", type text}, {"Zip Code", type text}}, "en-PH"),{{"CustomerKey", Text.Trim, type text}, {"Gender", Text.Trim, type text}, {"Name", Text.Trim, type text}, {"City", Text.Trim, type text}, {"State Code", Text.Trim, type text}, {"State", Text.Trim, type text}, {"Zip Code", Text.Trim, type text}, {"Country", Text.Trim, type text}, {"Continent", Text.Trim, type text}}),
+    #"Changed Type with Locale" = Table.TransformColumnTypes(#"Trimmed Text", {{"Birthday", type date}}, "en-US"),
+    #"Trimmed Text1" = Table.TransformColumns(Table.TransformColumnTypes(#"Changed Type with Locale", {{"Birthday", type text}}, "en-PH"),{{"Birthday", Text.Trim, type text}}),
+    #"Removed Duplicates" = Table.Distinct(#"Trimmed Text1", {"CustomerKey"}),
+    #"Removed Errors" = Table.RemoveRowsWithErrors(#"Removed Duplicates", {"CustomerKey"})
+in
+    #"Removed Errors"
+
+Products Table:
+
+let
+    Source = Csv.Document(File.Contents("C:\Users\Win10\Downloads\Project Portfolio\Sample Data\Global Electronics Retailer\Products.csv"),[Delimiter=",", Columns=10, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"ProductKey", Int64.Type}, {"Product Name", type text}, {"Brand", type text}, {"Color", type text}, {"Unit Cost USD", type text}, {"Unit Price USD", type text}, {"SubcategoryKey", Int64.Type}, {"Subcategory", type text}, {"CategoryKey", Int64.Type}, {"Category", type text}}),
+    #"Changed Type with Locale" = Table.TransformColumnTypes(#"Changed Type", {{"Unit Cost USD", Currency.Type}}, "en-US"),
+    #"Changed Type with Locale1" = Table.TransformColumnTypes(#"Changed Type with Locale", {{"Unit Price USD", Currency.Type}}, "en-US"),
+    #"Trimmed Text" = Table.TransformColumns(Table.TransformColumnTypes(#"Changed Type with Locale1", {{"ProductKey", type text}, {"Unit Cost USD", type text}, {"Unit Price USD", type text}, {"SubcategoryKey", type text}, {"CategoryKey", type text}}, "en-PH"),{{"ProductKey", Text.Trim, type text}, {"Product Name", Text.Trim, type text}, {"Brand", Text.Trim, type text}, {"Color", Text.Trim, type text}, {"Unit Cost USD", Text.Trim, type text}, {"Unit Price USD", Text.Trim, type text}, {"SubcategoryKey", Text.Trim, type text}, {"Subcategory", Text.Trim, type text}, {"CategoryKey", Text.Trim, type text}, {"Category", Text.Trim, type text}}),
+    #"Removed Duplicates" = Table.Distinct(#"Trimmed Text", {"ProductKey"})
+in
+    #"Removed Duplicates"
+
+Sales Table:
+
+let
+    Source = Csv.Document(File.Contents("C:\Users\Win10\Downloads\Project Portfolio\Sample Data\Global Electronics Retailer\Sales.csv"),[Delimiter=",", Columns=9, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Order Number", Int64.Type}, {"Line Item", Int64.Type}, {"Order Date", type date}, {"Delivery Date", type text}, {"CustomerKey", Int64.Type}, {"StoreKey", Int64.Type}, {"ProductKey", Int64.Type}, {"Quantity", Int64.Type}, {"Currency Code", type text}}),
+    #"Changed Type with Locale" = Table.TransformColumnTypes(#"Changed Type", {{"Delivery Date", type date}}, "en-US"),
+    #"Trimmed Text" = Table.TransformColumns(Table.TransformColumnTypes(#"Changed Type with Locale", {{"Order Number", type text}, {"Line Item", type text}, {"Order Date", type text}, {"Delivery Date", type text}, {"CustomerKey", type text}, {"StoreKey", type text}, {"ProductKey", type text}, {"Quantity", type text}}, "en-PH"),{{"Order Number", Text.Trim, type text}, {"Line Item", Text.Trim, type text}, {"Order Date", Text.Trim, type text}, {"Delivery Date", Text.Trim, type text}, {"CustomerKey", Text.Trim, type text}, {"StoreKey", Text.Trim, type text}, {"ProductKey", Text.Trim, type text}, {"Quantity", Text.Trim, type text}, {"Currency Code", Text.Trim, type text}}),
+    #"Removed Duplicates" = Table.Distinct(#"Trimmed Text", {"Order Number"}),
+    #"Changed Type1" = Table.TransformColumnTypes(#"Removed Duplicates",{{"Quantity", Int64.Type}, {"Order Date", type date}})
+in
+    #"Changed Type1"
+
+Stores Table:
+
+let
+    Source = Csv.Document(File.Contents("C:\Users\Win10\Downloads\Project Portfolio\Sample Data\Global Electronics Retailer\Stores.csv"),[Delimiter=",", Columns=5, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"StoreKey", Int64.Type}, {"Country", type text}, {"State", type text}, {"Square Meters", Int64.Type}, {"Open Date", type text}}),
+    #"Changed Type with Locale" = Table.TransformColumnTypes(#"Changed Type", {{"Open Date", type date}}, "en-US"),
+    #"Trimmed Text" = Table.TransformColumns(Table.TransformColumnTypes(#"Changed Type with Locale", {{"StoreKey", type text}, {"Square Meters", type text}, {"Open Date", type text}}, "en-PH"),{{"StoreKey", Text.Trim, type text}, {"Country", Text.Trim, type text}, {"State", Text.Trim, type text}, {"Square Meters", Text.Trim, type text}, {"Open Date", Text.Trim, type text}}),
+    #"Removed Duplicates" = Table.Distinct(#"Trimmed Text", {"StoreKey"})
+in
+    #"Removed Duplicates"

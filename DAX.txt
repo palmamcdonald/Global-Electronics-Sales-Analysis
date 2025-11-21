@@ -1,0 +1,5 @@
+Total Sales:=SUMX(Sales; Sales[Quantity]*RELATED(Products[Unit Price USD]))
+Total Quantity:=SUM(Sales[Quantity])
+Number of Orders:=DISTINCTCOUNT(Sales[Order Number])
+Number of Customers:=DISTINCTCOUNT(Sales[CustomerKey])
+AOV:=DIVIDE([Total Sales];[Number of Orders];0)
